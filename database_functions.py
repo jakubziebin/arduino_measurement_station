@@ -22,4 +22,23 @@ def put_value_into_db(value: float, insert_query: str) -> None:
     cursor.execute(query)
     connection.commit()
     connection.close()
-    
+
+
+def reset_tables(values_to_reset: tuple) -> None:
+    for value in values_to_reset:
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        query = f"""TRUNCATE TABLE {value}"""
+        cursor.execute(query)
+        connection.commit()
+        connection.close()
+
+
+def select_max_value(value: str) -> float | str:
+    connection = connect_to_db()
+    cursor = connection.cursor()
+    query = f"""SELECT MAX({value}) FROM {value}"""
+    cursor.execute(query)
+    result = cursor.fetchone()
+    connection.close()
+    return result[0]
