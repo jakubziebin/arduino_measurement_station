@@ -13,3 +13,13 @@ def connect_to_db():
         auth_plugin = "mysql_native_password"
     )
     return connection
+
+
+def put_value_into_db(value: float, insert_query: str) -> None:
+    connection = connect_to_db()
+    cursor = connection.cursor()
+    query = insert_query  % (value)
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+    
