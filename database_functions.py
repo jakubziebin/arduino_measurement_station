@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mysql import connector 
-"""File with ready function to connect with database"""
+"""File with ready functions to interact with database"""
 
 
-def connect_to_db():
+def connect_to_db() -> Any:
     connection = connector.connect(
         user = "student",
         password = "Student123",

@@ -24,7 +24,8 @@ if __name__ == "__main__":
     smoke_feed = aio.feeds("smoke")
     max_temp_feed = aio.feeds('todays-max-temperature')
     max_hum_feed = aio.feeds("todays-max-humidity")
-    
+    light_feed = aio.feeds("light")
+
     while True:
 
         line = ser.readline().decode(encoding='latin-1').strip().split(" ")
@@ -82,6 +83,14 @@ if __name__ == "__main__":
             else:
                 continue   
         
+        if "LIGHT" in checker:
+            query = """INSERT INTO
+            LIGHT (LIGHT) VALUES ((%s))""" 
+            
+            aio.send_data(light_feed.key, value)
+            put_value_into_db(value, query)
+            print("light in lux: ", value)
+
         if datetime.now().time() == time(0, 0):
             values_to_reset = ("temperature", "humidity", "LPG", "CO", "SMOKE")
             reset_tables(values_to_reset)
