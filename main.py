@@ -14,11 +14,8 @@ if __name__ == "__main__":
     ser = serial.Serial("COM6", 9600)
 
     ADAFRUIT_IO_USERNAME = 'ziebjak'
-<<<<<<< HEAD
-    ADAFRUIT_IO_KEY = 'aio_ZEie70iM7stu9fil15km3024NinQ' 
-=======
     ADAFRUIT_IO_KEY = '' 
->>>>>>> 240291ca17f42a24366d1796d6a75a94bc9aaedc
+
 
     aio = Client(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
     temperature_feed = aio.feeds("temperature")
