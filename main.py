@@ -14,7 +14,7 @@ if __name__ == "__main__":
     ser = serial.Serial("COM6", 9600)
 
     ADAFRUIT_IO_USERNAME = 'ziebjak'
-    ADAFRUIT_IO_KEY = 'aio_EbjU35HfD5ti5qRAZMHd9zUV6a1n' 
+    ADAFRUIT_IO_KEY = 'aio_ZEie70iM7stu9fil15km3024NinQ' 
 
     aio = Client(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
     temperature_feed = aio.feeds("temperature")
@@ -25,6 +25,8 @@ if __name__ == "__main__":
     max_temp_feed = aio.feeds('todays-max-temperature')
     max_hum_feed = aio.feeds("todays-max-humidity")
     light_feed = aio.feeds("light")
+    noise_feed = aio.feeds("noise")
+    particles_feed = aio.feeds("particles")
 
     while True:
 
@@ -33,6 +35,13 @@ if __name__ == "__main__":
 
         if ":" in checker:
             value = get_value_from_measure(measure=checker)
+
+        if "PARTICLES" in checker:
+            query = """INSERT INTO
+                PARTICLES (PATRICLES) VALUES ((%s))""" 
+            aio.send_data(particles_feed.key, value)
+            put_value_into_db(value, query)
+            print("particles:", value)
 
         if "temperature" in checker:
             query = """INSERT INTO
@@ -84,12 +93,13 @@ if __name__ == "__main__":
                 continue   
         
         if "LIGHT" in checker:
-            query = """INSERT INTO
-            LIGHT (LIGHT) VALUES ((%s))""" 
-            
             aio.send_data(light_feed.key, value)
-            put_value_into_db(value, query)
-            print("light in lux: ", value)
+            print("Light sent!")
+        
+        if "NOISE" in checker:
+         aio.send_data(noise_feed.key, value)
+         print("Noise sent!")
+      
 
         if datetime.now().time() == time(0, 0):
             values_to_reset = ("temperature", "humidity", "LPG", "CO", "SMOKE")
